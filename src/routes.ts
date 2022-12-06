@@ -1,4 +1,4 @@
-import Dashboard from "./Pages/Dashboard";
+import Dashboard from "./Pages/Sales";
 import Error from "./Pages/Error";
 import Login from "./Pages/Login";
 import LineGraph from './Pages/LineGraph';
@@ -12,7 +12,7 @@ export type routesType = {
 }
 export const routes: routesType[] = [{
     id: 0,
-    path: "/",
+    path: "/*",
     component: LandingPage,
 },
 {
