@@ -1,6 +1,7 @@
-import React, { Fragment, FC,useReducer ,useState} from 'react'
-import { AppBar, Toolbar, Typography, Tabs, Tab,Box } from '@mui/material'
+import React, { Fragment, FC, useReducer, useState ,useEffect} from 'react'
+import { AppBar, Toolbar, Typography, Tabs, Tab, Box } from '@mui/material'
 import _ from 'lodash'
+import { useNavigate,useLocation } from 'react-router-dom'
 // const tabChangeReducer = (state:any,action:any)=>{
 // console.log(state,action,"act")
 // }
@@ -12,10 +13,17 @@ const TopBar: FC<any> = (props) => {
     const { title, barColor, tabsList, logo } = props
     // const [tabState, tabDispatch] = useReducer<any,any>(tabChangeReducer, tabInitialState)
     const [tabVal, setTabVal] = useState<number>(0)
-const tabChangeHandler = (val:any,newVal:any)=>{
-console.log(newVal,"ddd")
-setTabVal(newVal)
-}
+    const navigateTo = useNavigate()
+    const location = useLocation()
+    const tabChangeHandler = (val: any, newVal: any) => {
+        console.log(val?.target?.innerText, "ddd")
+        const pathName = (val?.target?.innerText).toLowerCase()
+        navigateTo(`/${pathName}`)
+        setTabVal(newVal)
+    }
+    useEffect(() => {
+    
+    }, [location?.pathname])
     return (
         <Fragment>
             <AppBar color={barColor}>
@@ -24,10 +32,10 @@ setTabVal(newVal)
                     <Typography variant='h3'>
                         {title}
                     </Typography>
-                    <Box style={{marginLeft:'auto'}}>
-                    <Tabs value={tabVal}  onChange = {tabChangeHandler}>
-                        {_.map(tabsList, tabName => <Tab  style={{textTransform:"none",color:"white",fontSize:'15px'}} color='secondary'label={tabName}/>)}
-                    </Tabs>
+                    <Box style={{ marginLeft: 'auto' }}>
+                        <Tabs value={tabVal} onChange={tabChangeHandler}>
+                            {_.map(tabsList, tabName => <Tab style={{ textTransform: "none", color: "white", fontSize: '15px' }} color='secondary' label={tabName} />)}
+                        </Tabs>
                     </Box>
                 </Toolbar>
             </AppBar>
