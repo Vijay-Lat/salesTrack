@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import TopBar from '../commonComponents/TopBar'
 import RuningImg from '../Assets/Running.png'
 import { Route, Routes } from 'react-router-dom'
 import Sales from './Sales';
-import _ from 'lodash'
+import _, { Object } from 'lodash'
 import Track from './Track';
+import { Dialog, Modal } from '@mui/material';
+import { Button, FormGroup, Box, Table, TableHead, TableBody, TableCell } from '@mui/material'
+import { productsType } from '../commonComponents/arrayTypes';
+import ProductListContext from '../commonComponents/productListContext';
 enum Title {
     title = 'Sales Track',
     color = "secondary"
@@ -16,10 +20,32 @@ interface tabType {
 }
 const subTabs: tabType[] = [{ id: 0, comp: Sales, path: "/sales" }, { id: 1, comp: Track, path: "/track" }]
 const LandingPage = () => {
-    const tabNames = ["Sales", "Track"]
+    const [showCart, setShowCart] = useState<boolean>(false)
+    // const [products, setProducts] = useState<productsType[]>([])
+    const tabNames = ["Sales", "Track",]
+    const toggleCartModal = () => setShowCart((showCart) => !showCart)
+    const listContext: any = useContext(ProductListContext)
+
+
     return (
         <div>
-            <TopBar logo={RuningImg} title={Title.title} barColor={Title.color} tabsList={tabNames} />
+            <Dialog open={showCart} onClose={toggleCartModal}>
+                {listContext?.products?.length > 0 ?
+                    <>
+                        {_.map(listContext?.products, (table, index: number) => <Table><TableHead>
+                            <TableCell>{index+1}.</TableCell>
+                            <TableCell>{table?.name}</TableCell>
+                            <TableCell>{table?.price}</TableCell>
+                        </TableHead>
+                            {/* <TableBody>
+                        <Button>
+                            {table?.buttonName}
+                        </Button>
+                    </TableBody> */}
+                        </Table>)}
+                    </> : <Box style={{ width: "100px", height: "100px" , textAlign:"center",paddingTop:"39%"}}>No Data</Box>}
+            </Dialog>
+            <TopBar logo={RuningImg} title={Title.title} barColor={Title.color} tabsList={tabNames} buttonClick={toggleCartModal} buttonName='View Cart' />
             <Routes>
                 {_.map(subTabs, path => <Route path={path?.path} element={<path.comp />} />)}
             </Routes>
