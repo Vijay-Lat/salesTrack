@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material'
-
+// color names should be as hexcodes 
 export default createTheme({
     palette: {
         common: {
